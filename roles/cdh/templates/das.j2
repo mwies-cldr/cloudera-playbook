@@ -1,0 +1,25 @@
+{
+  "refName": "DAS-1",
+  "serviceType": "DAS",
+  "serviceConfigs": [
+      {
+          "name" : "data_analytics_studio_database_host",
+          "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+        }, {
+          "name" : "data_analytics_studio_database_password",
+          "value" : "{{ databases.das.pass }}"
+        }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "DAS-1-DAS_WEBAPP-BASE",
+      "roleType": "DAS_WEBAPP",
+      "base": true
+    },
+    {
+      "refName": "DAS-1-DAS_EVENT_PROCESSOR-BASE",
+      "roleType": "DAS_EVENT_PROCESSOR",
+      "base": true
+    }
+  ]
+}

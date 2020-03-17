@@ -1,0 +1,60 @@
+{
+  "refName": "RANGER-1",
+  "serviceType": "RANGER",
+  "serviceConfigs": [
+      {
+          "name" : "keyadmin_user_password",
+          "value" : "{{ ranger_keyadmin_user_password }}"
+        }, {
+          "name" : "rangeradmin_user_password",
+          "value" : "{{ ranger_rangeradmin_user_password }}"
+        }, {
+          "name" : "rangertagsync_user_password",
+          "value" : "{{ ranger_rangertagsync_user_password }}"
+        }, {
+          "name" : "rangerusersync_user_password",
+          "value" : "{{ ranger_rangerusersync_user_password }}"
+        }, {
+          "name" : "solr_service",
+          "ref" : "SOLR-1"
+        }, {
+          "name" : "hdfs_service",
+          "ref" : "HDFS-1" 
+        }          
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "RANGER-1-RANGER_ADMIN-BASE",
+      "roleType": "RANGER_ADMIN",
+      "base": true,
+      "configs": [
+          {
+            "name" : "ranger_admin_max_heap_size",
+            "value" : "{{ ranger_ranger_admin_max_heap_size }}"
+          }, {
+            "name" : "ranger_database_host",
+            "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+          }, {
+            "name" : "ranger_database_password",
+            "value" : "{{ databases.ranger.pass }}"
+          }, {
+            "name" : "ranger_database_type",
+            "value" : {% if databases.ranger.type == "mysql" %}"MySQL"{% endif %}{% if databases.ranger.type == "postgresql" %}"PostgreSQL"{% endif %}
+          }, {
+            "name" : "ranger_database_user",
+            "value" : "{{ databases.ranger.user }}"
+          }
+      ] 
+    },
+    {
+      "refName": "RANGER-1-RANGER_USERSYNC-BASE",
+      "roleType": "RANGER_USERSYNC",
+      "base": true
+    },
+    {
+      "refName": "RANGER-1-RANGER_TAGSYNC-BASE",
+      "roleType": "RANGER_TAGSYNC",
+      "base": true
+    }
+  ]
+}

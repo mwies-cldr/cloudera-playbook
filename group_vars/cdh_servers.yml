@@ -2,6 +2,7 @@
 
 db_hostname: "{{ hostvars[groups['db_server'][0]]['inventory_hostname'] }}"
 scm_hostname: "{{ hostvars[groups['scm_server'][0]]['inventory_hostname'] }}"
+edge_hostname: "{{ hostvars[groups['edge_servers'][0]]['inventory_hostname'] }}"
 
 cluster_display_name: cluster_1
 
@@ -23,9 +24,26 @@ cdh_services:
     scratch_dirs: /tmp/impala
 
   - type: oozie
+  # Needed for CDH #
 
-  - type: sentry
+  # -type: sentry
 
+  # Needed for CDH ( End ) #
+
+  # Needed for CDP #
+  - type: tez
+ 
+  - type: hive_on_tez
+
+  - type: solr
+
+  - type: ranger
+
+  - type: kafka
+ 
+  - type: atlas
+
+  # Needed for CDP ( End ) #
   - type: spark
 
   - type: yarn

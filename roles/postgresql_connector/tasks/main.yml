@@ -1,0 +1,42 @@
+---
+- name: Create /usr/share/java directory
+  file:
+    path: /usr/share/java
+    state: directory
+    mode: 0755
+
+- name: Install unzip package
+  package:
+    name:
+    - unzip
+    state: installed
+
+- stat:
+    path: /usr/share/java/postgresql-42.2.11.jar
+  register: postgresql_connector_java
+
+- name: Download Postgresql Connector/J 
+  get_url:
+    url: https://jdbc.postgresql.org/download/postgresql-42.2.11.jar
+    dest: "{{ tmp_dir }}/postgresql-42.2.11.jar"
+    checksum: "md5:a3c6dcc2497fb593a3ed3d68beff13fc"
+    mode: 0644
+  when: not postgresql_connector_java.stat.exists
+
+- name: Copy Postgresql  Connector/J jar file to correct location
+  copy:
+    src: "{{ tmp_dir }}/postgresql-42.2.11.jar"
+    dest: /usr/share/java/postgresql-42.2.11.jar
+    mode: 0644
+    remote_src: yes
+  when: not postgresql_connector_java.stat.exists
+
+- name: Python PIP
+  yum:
+    name: python-pip
+    state: installed
+
+- name: Install psycopg2
+  pip:
+    name: psycopg2-binary
+    state: present

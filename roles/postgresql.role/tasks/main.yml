@@ -1,0 +1,61 @@
+---
+#- name: Add the SCL Repository
+#  yum_repository:
+#    name: RedhatSCL
+#    description: RedhatSCL
+#    baseurl: "{{ repourl }}" 
+
+- name: Enable SCL on CentOS
+  yum:
+    name: centos-release-scl.noarch
+    state: installed
+
+- name: Make sure the postgresql package is present
+  yum:
+    name: "{{ pg_package }}"
+    state: installed
+
+- name: Python PIP
+  yum:
+    name: python-pip
+    state: installed
+
+- name: Install psycopg2
+  pip:
+    name: psycopg2-binary
+
+- name: Check if the database has already been initialized
+  stat:
+    path: "{{ pg_version_path }}"
+  register: pgdata_exist
+
+- name: Initialize the database, register data path in systemd
+  command: "{{ pg_systemd_unit }} --unit rh-postgresql{{ pg_version }}-postgresql@ --datadir {{ pg_data_path }}" 
+  when: not pgdata_exist.stat.exists
+
+- name: Initialize the database, reload systemd
+  command: systemctl daemon-reload
+  when: not pgdata_exist.stat.exists
+
+- name: Initialize the databas, run postgres-setup
+  command: "{{ pg_setup }} initdb"
+  when: not pgdata_exist.stat.exists
+
+- name: Check if autostart of the database is enabled
+  service:
+    name: "{{ pg_service }}" 
+    enabled: yes
+
+- name: Configure postgresql.conf
+  template:
+    src: postgresql.conf.j2
+    dest: "{{ pg_conf }}"
+  notify: restart postgresql
+
+- name: Flushing handlers
+  meta: flush_handlers
+
+- name: Check if the service is running
+  service:
+    name: "{{ pg_service }}"
+    state: started

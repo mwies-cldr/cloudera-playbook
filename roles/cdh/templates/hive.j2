@@ -12,24 +12,27 @@
       "name": "hive_metastore_database_name",
       "value": "{{ databases.metastore.name }}"
     }, {
+      "name": "hive_metastore_database_port",
+      "value": "{{ database_port }}"
+    }, {
       "name": "hive_metastore_database_user",
       "value": "{{ databases.metastore.user }}"
     }, {
       "name": "hive_metastore_database_password",
       "value": "{{ databases.metastore.pass }}"
-    }, {
+    }, {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} {
       "name": "spark_on_yarn_service",
       "ref": "SPARK_ON_YARN-1"
-    }, {
+    }, {% endif %} {
       "name": "mapreduce_yarn_service",
       "ref": "YARN-1"
     }, {
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "name": "sentry_service",
       "ref": "SENTRY-1"
-    }
+    } {% endif %}
   ],
   "roleConfigGroups": [
     {
@@ -60,7 +63,7 @@
         }
       ],
       "base": true
-    }, {
+    } {% if ( cluster_version_cdh_major|int == 5 ) or ( cluster_version_cdh_major|int == 6 ) %} , {
       "refName": "HIVE-1-HIVESERVER2-BASE",
       "roleType": "HIVESERVER2",
       "configs": [
@@ -70,6 +73,6 @@
         }
       ],
       "base": true
-    }
+    }  {% endif %}
   ]
 }

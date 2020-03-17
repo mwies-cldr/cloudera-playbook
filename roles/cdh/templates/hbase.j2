@@ -2,18 +2,36 @@
   "refName": "HBASE-1",
   "serviceType": "HBASE",
   "serviceConfigs": [
+    {% if cluster_version_cdh_major|int == 7 %}{
+      "name" : "hbase_atlas_hook_enable",
+      "value" : "true"
+    },{% endif %}
+    {% if ( cluster_version_cdh_major|int == 7 ) and ( cluster_version_cdh_minor|int > 0 ) %}{
+      "name": "atlas_service",
+      "ref": "ATLAS-1"
+    },
+    {% endif %}
     {
       "name": "hdfs_service",
       "ref": "HDFS-1"
     }, {
-    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %}
+      "name" : "hbase_thriftserver_http",
+      "value" : "true"
+    }, {
+      "name" : "hbase_thriftserver_support_proxyuser",
+      "value" : "true"
+    },
+    {% if (krb5_kdc_type is defined) and (krb5_kdc_type != 'none') %} {
       "name" : "hbase_restserver_security_authentication",
       "value" : "kerberos",
     }, {
       "name" : "hbase_security_authentication",
       "value" : "kerberos",
     }, {
-    {% endif %}
+      "name" : "hbase_service_config_safety_valve",
+      "value" : "<property><name>hbase.thrift.spnego.principal</name><value>HTTP/{{ hostvars[edge_hostname]['inventory_hostname'] }}@{{ krb5_realm }}</value></property><property><name>hbase.thrift.spnego.keytab.file</name><value>hbase.keytab</value></property>"
+    },
+    {% endif %} {
       "name": "zookeeper_service",
       "ref": "ZOOKEEPER-1"
     } 
@@ -42,3 +60,4 @@
     }
   ]
 }
+

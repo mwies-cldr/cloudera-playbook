@@ -22,18 +22,35 @@
 - name: Install MariaDB and create databases
   hosts: db_server
   roles:
-    - mariadb
+    - { role: mariadb, when: (database_type is defined) and (database_type == 'mysql') }
   tags:
     - mysql
     - mysql_server
 
+- name: Install PostgreSQL and create databases
+  hosts: db_server
+  roles:
+    - { role: "postgresql.role", pg_version: "10", when: (database_type is defined) and (database_type == 'postgresql') }    
+    - { role: "pg_database.role", pg_version: "10", when: (database_type is defined) and (database_type == 'postgresql') }    
+  tags:
+    - postgresql
+    - postgresql_server
+
 - name: Install MySQL Connector
   hosts: cdh_servers
   roles:
-    - mysql_connector
+    - { role: mysql_connector, when: (database_type is defined) and (database_type == 'mysql') }
   tags:
     - mysql
     - mysql_client
+
+- name: Install Postgresql Connector
+  hosts: cdh_servers
+  roles:
+    - { role: postgresql_connector, when: (database_type is defined) and (database_type == 'postgresql') }
+  tags:
+    - postgresql
+    - postgresql_client
 
 - name: Install MIT KDC Server
   hosts: krb5_server
@@ -65,7 +82,9 @@
   hosts: scm_server
   roles:
     - scm
-  tags: cluster_template
+  tags: 
+    - cm_server
+    - cluster_template
 
 - name: Install CDH
   hosts: scm_server

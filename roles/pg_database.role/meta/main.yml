@@ -1,0 +1,12 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: Matthias Wies
+  company: Capgemini
+  min_ansible_version: 2.2
+  platforms:
+  - name: Redhat
+  categories:
+  - database
+  - system

@@ -1,0 +1,38 @@
+---
+- name: Create the Database User
+  become: yes
+  become_user: "{{ imperson }}"
+  postgresql_user:
+    name: "{{ item.value.user }}"
+    password: "{{ item.value.pass }}"
+    state: present
+  with_dict: "{{ databases }}"
+
+- name: Create the Database
+  become: yes
+  become_user: "{{ imperson }}"
+  postgresql_db:
+    name: "{{ item.value.name }}"
+    owner: "{{ item.value.user }}"
+    encoding: "utf8"
+    state: present
+  with_dict: "{{ databases }}"
+  
+
+- name: Add the cloudera user and database to the pg_hba.conf of psql
+  lineinfile:
+    regexp: "^host.*{{ item.value.name }}.*{{ item.value.user }}.*md5"
+    path: /var/opt/rh/rh-postgresql{{ pg_version }}/lib/pgsql/data/pg_hba.conf
+    line: "host    {{ item.value.name }}             {{ item.value.user }}             0.0.0.0/0            md5"
+    state: present
+  with_dict: "{{ databases }}"
+#  notify: restart postgresql
+  
+- name: restart postgresql, notify somehow does not work properly
+  service:
+    name: "{{ pg_service }}"
+    state: restarted
+
+- name: Pause to make sure Postgresql is fully restarted
+  pause:
+    minutes: 2

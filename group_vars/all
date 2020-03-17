@@ -4,12 +4,19 @@ ansible_become: true
 tmp_dir: /tmp
 
 ## ------------------------------------------------------------------------------------------------------------
+## Database Client Options
+## ------------------------------------------------------------------------------------------------------------
+
+database_type: postgresql
+database_port: 5432
+
+## ------------------------------------------------------------------------------------------------------------
 ## Security options
 ## ------------------------------------------------------------------------------------------------------------
 
 krb5_realm: MIT.EXAMPLE.COM
 # 'Active Directory', 'MIT KDC', or 'none' to disable security
-krb5_kdc_type: MIT KDC
+krb5_kdc_type: none
 krb5_kdc_admin_user: "cloudera-scm/admin@{{ krb5_realm }}"
 krb5_kdc_admin_passwd: changeme
 krb5_kdc_master_passwd: changeme
@@ -41,13 +48,13 @@ ad_site: Default-First-Site-Name
 ## ------------------------------------------------------------------------------------------------------------
 
 # Version of CDH to install
-cluster_version_cdh: 6.3.2
-#cluster_version_cdh: 7.x
+#cluster_version_cdh: 6.3.2
+cluster_version_cdh: 7.0.3.0
 
 # Version of Cloudera Manager to install
-cluster_version_cm:  6.3.1
+#cluster_version_cm:  6.3.1
 #cluster_version_cm:  "{{ cluster_version_cdh }}"
-#cluster_version_cm:  7.x.0
+cluster_version_cm:  7.0.3
 
 # Version of CDS Powered by Apache Spark (note: not installed if CDH6/7 is also selected)
 cluster_version_cds: 2.4.0.cloudera2
@@ -66,7 +73,7 @@ configs_by_version:
   "5":
     scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/{{ cluster_version_cm }}/"
     scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm5/redhat/{{ ansible_distribution_major_version }}/x86_64/cm/RPM-GPG-KEY-cloudera"
-    scm_parcel_repositories: 
+    scm_parcel_repositories:
       - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh5/parcels/{{ cluster_version_cdh }}/"
       - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/spark2/parcels/{{ cluster_version_cds }}/"
     scm_csds:
@@ -75,14 +82,14 @@ configs_by_version:
   "6":
     scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
     scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cm6/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
-    scm_parcel_repositories: 
+    scm_parcel_repositories:
       - "{{ cloudera_archive_protocol }}{{ cloudera_archive }}/cdh6/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
   "7":
-    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
-    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
+    scm_repo_url:    "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum"
+    scm_repo_gpgkey: "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cm7/{{ cluster_version_cm }}/redhat{{ ansible_distribution_major_version }}/yum/RPM-GPG-KEY-cloudera"
     scm_parcel_repositories:
-      - "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/p/cdh7/{{ cluster_version_cdh }}/parcels"
+      - "{{ cloudera_archive_protocol }}{{ cloudera_archive_authn }}@{{ cloudera_archive }}/cdh7/{{ cluster_version_cdh }}/parcels"
     scm_prepare_database_script_path: "/opt/cloudera/cm/schema/scm_prepare_database.sh"
 
 scm_default_user: admin
@@ -106,3 +113,31 @@ java_rpm_location: /tmp/jdk-8u181-linux-x64.rpm
 java_rpm_remote_src: no
 java_jce_location: /tmp/jce_policy-8.zip
 java_jce_remote_src: no
+
+## ------------------------------------------------------------------------------------------------------------
+## Ranger installation options ( Ranger has a strong password policy )
+## ------------------------------------------------------------------------------------------------------------
+ranger_keyadmin_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangeradmin_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangertagsync_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_rangerusersync_user_password: "Ch2ng3M3Ch2ng3M3"
+ranger_ranger_admin_max_heap_size: 1024
+
+## ------------------------------------------------------------------------------------------------------------
+## Atlas installation options ( Atlas has a strong password policy )
+## ------------------------------------------------------------------------------------------------------------
+atlas_atlas_admin_password: "Ch2ng3M3Ch2ng3M3"
+atlas_atlas_admin_username: "admin"
+
+## ------------------------------------------------------------------------------------------------------------
+## YARN installation options ( On 16 Gb nodes autoconfig gives YARN not enough memory to run the TEZ test job )
+## ------------------------------------------------------------------------------------------------------------
+yarn_yarn_nodemanager_resource_memory_mb: "4096"
+yarn_yarn_scheduler_maximum_allocation_mb: "4096"
+
+## ------------------------------------------------------------------------------------------------------------
+## Hive on Tez installation options
+## ------------------------------------------------------------------------------------------------------------
+hive_tez_container_size: "2048"
+
+

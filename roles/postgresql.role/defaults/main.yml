@@ -1,0 +1,11 @@
+---
+pg_version: "94"
+el_version:  "6"
+scl_version: "2.3"
+pg_service: "rh-postgresql{{ pg_version }}-postgresql"
+pg_package: "rh-postgresql{{ pg_version }}-postgresql-server"
+pg_data_path: "/var/opt/rh/rh-postgresql{{ pg_version }}/lib/pgsql/data"
+pg_version_path: "{{ pg_data_path }}/PG_VERSION"
+pg_conf: "/var/opt/rh/rh-postgresql{{ pg_version }}/lib/pgsql/data/postgresql.conf"
+pg_systemd_unit: "/opt/rh/rh-postgresql{{ pg_version }}/root/usr/sbin/postgresql-new-systemd-unit" 
+pg_setup: "/opt/rh/rh-postgresql{{ pg_version }}/root/usr/bin/postgresql-setup" 
