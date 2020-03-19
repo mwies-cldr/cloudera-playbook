@@ -4,10 +4,7 @@
   "serviceConfigs": [
       {
           "name" : "zookeeper_service",
-          "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"
-        }, {
-          "name" : "data_analytics_studio_database_password",
-          "value" : "{{ databases.das.pass }}"
+          "ref": "ZOOKEEPER-1"
         }
   ],
   "roleConfigGroups": [
