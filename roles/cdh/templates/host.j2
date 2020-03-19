@@ -82,7 +82,9 @@
     "YARN-1-JOBHISTORY-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",
     "KAFKA-1-GATEWAY-BASE",
-    "ATLAS-1-GATEWAY-BASE",{% endif %}
+    "ATLAS-1-GATEWAY-BASE",
+    "QUEUEMANAGER-1-QUEUEMANAGER_WEBAPP-BASE",
+    "QUEUEMANAGER-1-QUEUEMANAGER_STORE-BASE",{% endif %}
     "ZOOKEEPER-1-SERVER-BASE" ]
 }, {
   "refName": "HostTemplate-Workers",
