@@ -11,7 +11,7 @@
     {
       "refName": "QUEUEMANAGER-1-QUEUEMANAGER_WEBAPP-BASE",
       "roleType": "QUEUEMANAGER_WEBAPP",
-      "base": true,
+      "base": true {% if ( cluster_version_cdh_major|int == 7 ) and ( cluster_version_cdh_minor|int < 1 ) %},
       "configs": [
           {
             "name" : "queuemanager_cm_api_client_login_name",
@@ -20,7 +20,7 @@
             "name" : "queuemanager_cm_api_client_login_password",
             "value" : "{{ scm_default_pass }}"
           }
-      ]     
+      ] {% endif %}    
     },
     {
       "refName": "QUEUEMANAGER-1-QUEUEMANAGER_STORE-BASE",
