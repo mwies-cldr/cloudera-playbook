@@ -43,6 +43,8 @@ cdh_services:
  
   - type: atlas
 
+  - type: queueman
+
   # Needed for CDP ( End ) #
   - type: spark
 
