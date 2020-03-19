@@ -2,6 +2,10 @@
   "refName": "YARN-1",
   "serviceType": "YARN",
   "serviceConfigs": [
+    {% if cluster_version_cdh_major|int == 7 %}{
+       "name": "queuemanager_service" ,
+       "ref": "QUEUEMANAGER=1"
+    },{% endif %}
     {
       "name": "cm_yarn_container_usage_job_user",
       "value": "cmjobuser"
