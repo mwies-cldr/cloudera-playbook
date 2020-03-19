@@ -1,0 +1,25 @@
+{
+  "refName": "QUEUEMANAGER-1",
+  "serviceType": "QUEUEMANAGER",
+  "serviceConfigs": [
+      {
+          "name" : "data_analytics_studio_database_host",
+          "value" : "{{ hostvars[db_hostname]['inventory_hostname'] }}"
+        }, {
+          "name" : "data_analytics_studio_database_password",
+          "value" : "{{ databases.das.pass }}"
+        }
+  ],
+  "roleConfigGroups": [
+    {
+      "refName": "QUEUEMANAGER-1-QUEUEMANAGER_WEBAPP-BASE",
+      "roleType": "QUEUEMANAGER_WEBAPP",
+      "base": true
+    },
+    {
+      "refName": "QUEUEMANAGER-1-QUEUEMANAGER_STORE-BASE",
+      "roleType": "QUEUEMANAGER_STORE",
+      "base": true
+    }
+  ]
+}
