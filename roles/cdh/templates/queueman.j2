@@ -11,7 +11,16 @@
     {
       "refName": "QUEUEMANAGER-1-QUEUEMANAGER_WEBAPP-BASE",
       "roleType": "QUEUEMANAGER_WEBAPP",
-      "base": true
+      "base": true,
+      "configs": [
+          {
+            "name" : "queuemanager_cm_api_client_login_name",
+            "value" : "{{ scm_default_user }}"
+          }, {
+            "name" : "queuemanager_cm_api_client_login_password",
+            "value" : "{{ scm_default_pass }}"
+          }
+      ]     
     },
     {
       "refName": "QUEUEMANAGER-1-QUEUEMANAGER_STORE-BASE",
