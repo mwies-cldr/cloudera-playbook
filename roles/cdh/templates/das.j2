@@ -1,4 +1,4 @@
-{
+{% if ( cluster_version_cdh_major|int == 7 ) and ( databases.das.type == "postgresql" ) %}{
   "refName": "DAS-1",
   "serviceType": "DAS",
   "serviceConfigs": [
@@ -23,3 +23,4 @@
     }
   ]
 }
+{% endif %}
