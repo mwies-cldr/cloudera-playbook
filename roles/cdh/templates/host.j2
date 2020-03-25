@@ -29,7 +29,9 @@
     "SPARK_ON_YARN-1-GATEWAY-BASE",
     "HIVE-1-GATEWAY-BASE",
     {% if cluster_version_cdh_major|int == 7 %} "TEZ-1-GATEWAY-BASE",{% endif %}
-    "YARN-1-GATEWAY-BASE" ]
+    {% if ( cluster_version_cdh_major|int == 7 ) and ( databases.das.type == "postgresql" ) %} "DAS-1-DAS_EVENT_PROCESSOR-BASE",
+    "DAS-1-DAS_WEBAPP-BASE",    
+    {% endif %}"YARN-1-GATEWAY-BASE" ]
 }, {
   "refName": "HostTemplate-Master1",
   "cardinality": 1,
