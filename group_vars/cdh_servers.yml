@@ -42,6 +42,8 @@ cdh_services:
   - type: kafka
  
   - type: atlas
+  
+  - type: das
 
   - type: queueman
 
