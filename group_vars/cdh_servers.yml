@@ -43,6 +43,7 @@ cdh_services:
  
   - type: atlas
   
+  # Remove DAS if using MySQL #
   - type: das
 
   - type: queueman
